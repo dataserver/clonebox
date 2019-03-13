@@ -206,7 +206,7 @@ Class Folder{
 			$sub_folders = $this->_node_get_children($id, ['self' => true, 'data_type'=> 'flat']);
 			$descendents_folders_id = array_column($sub_folders, 'id');  // ids of folder && descendents folders
 			foreach ($descendents_folders_id as $folder_id) {                   // delete files from folder && descendents bfolders
-				$this->_delete_files($folder_id);
+				$this->_delete_folder_files($folder_id);
 			}
 			$this->_node_delete($id);                                           // delete folder node (include descendents)
 
@@ -369,13 +369,14 @@ Class Folder{
 				if ( $row ) {
 					$folder = (object) $row;
 				} else {
-					$folder->add();
+					$folder = $folder->add();
 				}
 				$map[ $path ] = $folder->id;
 				$last_parent_id = $folder->id;
 				$last_relativer_dir .= $folder->normalized . '/';
 			}
 		}
+		
 		return $folder;
 	}
 
@@ -479,7 +480,7 @@ Class Folder{
 		return [];
 	}
 
-	private function _delete_files(int $folder_id) {
+	private function _delete_folder_files(int $folder_id) {
 
 		try {
 			$this->pdo->beginTransaction();
