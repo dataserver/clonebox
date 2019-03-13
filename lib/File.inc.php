@@ -71,22 +71,44 @@ Class File{
 		return false;
 	}
 
+	/**
+	 * Return errors generated during method chaining
+	 * 
+	 * @return array  of errors
+	 */
 	public function errors() {
 
 		return $this->_errors;
 	}
 
+	/**
+	 * Get id of current instance
+	 * 
+	 * @return int $id
+	 */
 	public function id() {
 
 		return $this->id;
 	}
 
+	/**
+	 * Set file instance->id to $id
+	 * 
+	 * @param int $id
+	 * @return self
+	 */
 	public function setId(int $id) {
 		$this->id = $id;
 
 		return $this;
 	}
 
+	/**
+	 * Save new name for file instance
+	 * 
+	 * @param string  $new_name
+	 * @return self
+	 */
 	public function setName(string $new_name) {
 		if ( !$this->valid ) {
 
@@ -100,6 +122,12 @@ Class File{
 		return $this;
 	}
 	
+	/**
+	 * Update folder_id of current file instance
+	 * 
+	 * @param int    $target_folder
+	 * @return self  
+	 */
 	public function move(int $target_folder) {
 		if ( !$this->valid ) {
 
@@ -120,7 +148,11 @@ Class File{
 		return $this;
 	}
 
-
+	/**
+	 * Insert into database current instances values
+	 * 
+	 * @return self
+	 */
 	public function add() {
 
 		try {
@@ -154,7 +186,12 @@ Class File{
 		return $this;
 	}
 
-	public function set($file) {
+	/**
+	 * Update database current values of instance->id
+	 * 
+	 * @return self
+	 */
+	public function set() {
 
 		try {
 			$this->pdo->beginTransaction();
@@ -197,6 +234,12 @@ Class File{
 		return $this;
 	}
 
+	/**
+	 * Delete file with id
+	 * 
+	 * @param int id  file id
+	 * @return self
+	 */
 	public function delete(int $id = null) {
 		$id = ( !$id ) ? $this->id : $id;
 		if ( !$this->valid ) {
@@ -229,6 +272,12 @@ Class File{
 		return $this;
 	}
 
+	/**
+	 * Delete files in array of ids
+	 * 
+	 * @param array array of ids
+	 * @return self
+	 */
 	public function deleteBatch(array $ids_array) {
 		$files_to_delete = [];
 
@@ -267,6 +316,12 @@ Class File{
 		return $this;
 	}
 
+	/**
+	 * Get file info with $id or current instance->id
+	 * 
+	 * @param int   $id file id
+	 * @return self
+	 */
 	public function get(int $id = null) {
 		$id = ( !$id ) ? $this->id : $id;
 		if ( $id ) {
@@ -300,6 +355,12 @@ Class File{
 		return $this;
 	}
 
+	/**
+	 * Get files in array of ids
+	 * 
+	 * @param array  array of ids
+	 * @return array array of associated values
+	 */
 	public function getBatch(array $ids_array) {
 		$rows = [];
 
@@ -321,6 +382,14 @@ Class File{
 		return $rows;
 	}
 
+	/**
+	 * Get all files from database
+	 * 
+	 * @param array $params [
+	 * 	'orderby' = order of sorting, default normalized field
+	 * ]
+	 * @return array  associated values
+	 */
 	public function all(array $params = []) {
 
 		$default_options = [
@@ -342,6 +411,13 @@ Class File{
 		return [];
 	}
 
+	/**
+	 * Sanitize file name, select if allow relative_path
+	 * 
+	 * @param string  $str
+	 * @param bool    $relative_path allow or not relative paths in $str
+	 * @return string filterd string
+	 */
 	public function sanitizeFilename($str, $relative_path = false)
 	{
 		$bad = $this->filenameBadChars;
@@ -363,7 +439,13 @@ Class File{
 
 		return stripslashes($str);
 	}
-	
+
+	/**
+	 * Remove invisible characters from a string, use for file names
+	 * 
+	 * @param string   $str
+	 * @return string  filtered string
+	 */
 	private function _remove_invisible_characters($str, $url_encoded = true)
 	{
 		$non_displayables = [];
@@ -387,6 +469,12 @@ Class File{
 		return $str;
 	}
 
+	/**
+	 * Delete files in the webserver
+	 * 
+	 * @param array  array of associated values
+	 * @return void
+	 */
 	private function _delete_server_files(array $files_rows = []) {
 
 		foreach ($files_rows as $row) {
@@ -401,32 +489,44 @@ Class File{
 		}
 	}
 
-	private function _filter_ids_array2(array $array = []) {
+	/**
+	 * 
+	 * Filter array to make sure are integer values,
+	 * remove empty values and convert strings to int
+	 * 
+	 * @param array   $array array of ids array("1", "", 2, " 3 ", 4, 5)
+	 *
+	 * @return array  $array of int ids array(1, 2, 3, 4, 5)
+	 */
+	private function _filter_ids_array(array $array = []) {
 		$array = array_filter( $array, 'strlen' );
 		$array = array_map(function($value) {
+
 			return intval($value);
 		}, $array);
 
 		return $array;
 	}
 
-	private function _filter_ids_array(array $array = []) {
-		$array = filter_var($array, FILTER_VALIDATE_INT, [
-													  'flags'   => FILTER_REQUIRE_ARRAY,
-													  'options' => ['min_range' => 1]
-													]
-						);
-		$filtered = array_filter($array, 'is_int');
 
-		return $filtered;
-	}
-
+	/**
+	 * Get file extension
+	 * 
+	 * @param string   $file/$file path
+	 * @return string  extension
+	 */
 	private function _get_file_extenstion(string $file) {
 		$info = pathinfo($file);
 
 		return $info['extension'];
 	}
 
+	/**
+	 * Get return file name without extension
+	 * 
+	 * @param string   $file name or path
+	 * @return string
+	 */
 	private function _get_file_name(string $file) {
 		$info = pathinfo($file);
 

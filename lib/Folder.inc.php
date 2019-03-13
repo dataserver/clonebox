@@ -32,7 +32,7 @@ Class Folder{
 	}
 
 	/**
-	 * Save to database the current instance values
+	 * Insert into database the current instance values
 	 * 
 	 * @return self return current instance
 	 */
@@ -102,7 +102,7 @@ Class Folder{
 	}
 
 	/**
-	 * Save to database the current instance values
+	 * Update database the current values based instance->id
 	 * 
 	 * @return self  return current instance
 	 */
