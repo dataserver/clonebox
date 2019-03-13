@@ -1,6 +1,7 @@
 /.dev
 /.live
 /.old
+/database
 /.sample_files
 
 /stored/*
