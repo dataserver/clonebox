@@ -254,23 +254,22 @@ function oops(int $code = 400, string $message, array $errors = []) {
 	exit;
 }
 
+/**
+ * 
+ * Filter array to make sure are integer values,
+ * remove empty values and convert strings to int
+ * 
+ * @param array   $array array of ids array("1", "", 2, " 3 ", 4, 5)
+ *
+ * @return array  $array of int ids array(1, 2, 3, 4, 5)
+ */
 function filter_ids_array(array $array = []) {
-	$array = filter_var($array, FILTER_VALIDATE_INT, [
-												  'flags'   => FILTER_REQUIRE_ARRAY,
-												  'options' => ['min_range' => 1]
-												]
-					);
-	$filtered = array_filter($array, 'is_int');
-	return $filtered;
-}
-
-function filter_ids_array2(array $array = []) {
 	$array = array_filter( $array, 'strlen' );
-	$array = array_map(function($value) {
+	$arr = array_map(function($value) {
 		return intval($value);
 	}, $array);
 
-	return $array;
+	return $arr;
 }
 
 /**
@@ -296,3 +295,4 @@ function generateRandomString(int $length = 10) {
 	}
 	return $randomString;
 }
+

@@ -14,7 +14,7 @@ define('CONFIG', [
 	'thumbnail_prefix' => 'tn-',
 
 	// database
-	'database' => 'database.sqlite3',  // sqlite3 database name
+	'database' => APP_PATH . 'database/database.sqlite3',  // sqlite3 database name
 
 
 ]);

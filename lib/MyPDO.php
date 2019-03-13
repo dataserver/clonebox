@@ -10,7 +10,7 @@ class MyPDO
 	public function __construct()
 	{
 		try { 
-			$this->pdo = new PDO("sqlite:". APP_PATH ."database/database.sqlite3");
+			$this->pdo = new PDO("sqlite:". CONFIG['database']);
 			$this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 		} catch (PDOException $e) {
 			throw $e;

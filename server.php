@@ -7,21 +7,17 @@ define('APP_PATH', __DIR__ . DIRECTORY_SEPARATOR);
 include_once(APP_PATH . 'config.php');
 include_once(APP_PATH . 'lib/SimpleImage.php');
 include_once(APP_PATH . 'lib/Urlify.php');
-include_once(APP_PATH . 'lib/misc.func.php');
 include_once(APP_PATH . 'lib/MyPDO.php');
 include_once(APP_PATH . 'lib/File.inc.php');
 include_once(APP_PATH . 'lib/Folder.inc.php');
 include_once(APP_PATH . 'lib/Request.inc.php');
+include_once(APP_PATH . 'lib/misc.func.php');
 
 chdir(__DIR__);
 $request = new Request;
 
-
-// $folder_id = isset($_POST['folder']) ? (int)$_POST['folder'] : (isset($_GET['folder']) ? (int)$_GET['folder'] : '');
 $folder_id = (int) $request->getPostGet("folder", FILTER_SANITIZE_NUMBER_INT);
-// $file_id =   isset($_POST['file'])   ? (int)$_POST['file']   : (isset($_GET['file'])   ? (int)$_GET['file']   : '');
 $file_id = (int) $request->getPostGet("file", FILTER_SANITIZE_NUMBER_INT);
-// $method =    isset($_POST['action']) ? $_POST['action']      : (isset($_GET['a'])      ? $_GET['a']           : 'get-all');
 $action = $request->getPostGet("action", FILTER_SANITIZE_STRING);
 $action = !empty($action) ? $action : "get-all";
 
@@ -541,8 +537,8 @@ switch ($action) {
 		$files_ids = isset($_POST['files_ids']) ? $_POST['files_ids'] : [];
 		$folders_ids = isset($_POST['folders_ids']) ? $_POST['folders_ids'] : [];
 
-		$files_ids = filter_ids_array2( $files_ids );
-		$folders_ids = filter_ids_array2( $folders_ids );
+		$files_ids = filter_ids_array( $files_ids );
+		$folders_ids = filter_ids_array( $folders_ids );
 
 		$file = new File;
 		$result_files = $file->deleteBatch($files_ids)->isValid();
@@ -572,8 +568,8 @@ switch ($action) {
 		$files_ids = isset($_POST['files_ids']) ? $_POST['files_ids'] : [];
 		$folders_ids = isset($_POST['folders_ids']) ? $_POST['folders_ids'] : [];
 
-		$files_ids = filter_ids_array2( $files_ids );
-		$folders_ids = filter_ids_array2( $folders_ids );
+		$files_ids = filter_ids_array( $files_ids );
+		$folders_ids = filter_ids_array( $folders_ids );
 
 		foreach ($files_ids as $file_id) {
 			$file = new File;
@@ -610,7 +606,7 @@ switch ($action) {
 		];
 }
 
-// ob_start('ob_gzhandler');
+ob_start('ob_gzhandler');
 http_response_code($json['code']);
 header('Content-type: application/json');
 echo json_encode($json);
