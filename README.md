@@ -18,8 +18,9 @@ CloneBox is a simple file manager in php. Optimized for mobile
 - Bootstrap
 - Jsrender
 - Lodash
-- Jscookie
+- Js-cookie
 - Toastr
+- Bootbox.js
 - Moment
 - BackDetect.js
 - FontAwesome 4.7
