@@ -46,8 +46,8 @@ switch ($action) {
 
 			if ( $children_folder_path != "" &&  $children_folder_path != "/") {
 				$folder = new Folder;
-				$folder = $folder->getOrCreatePathToFolder($children_folder_path, $parent_id);
-				$folder_id = ($folder) ? $folder->id : 1;
+				$id = $folder->getIdToFolderPath($children_folder_path, $parent_id);
+				$folder_id = ( is_null($id) ) ? 1 : $id;
 			} else {
 				$folder_id = $parent_id;
 			}

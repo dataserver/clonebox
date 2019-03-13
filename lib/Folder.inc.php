@@ -9,6 +9,7 @@ Class Folder{
 	public $parent_id = null;
 	public $name = null;
 	public $normalized = null;
+	public $path = null;
 	public $type = 'folder';
 	public $lastmodified_on = null;
 	public $created_on = null;
@@ -128,7 +129,7 @@ Class Folder{
 			$this->pdo->beginTransaction();
 
 			$this->normalized = strtoupper( Urlify::normalize_name($this->name, false) );
-			$this->path = $this->getPathToFolder($this->parent_id) . $this->normalized . "/";
+			$this->path = ( is_null($this->path) ) ? $this->getPathToFolder($this->parent_id) . $this->normalized . "/" : $this->path;
 
 			$stmt = $this->pdo->prepare("INSERT INTO folders 
 								   (name, normalized, parent_id, path, lastmodified_on, created_on) VALUES 
@@ -349,12 +350,11 @@ Class Folder{
 	}
 	// Home/Xyz/Abc
 	// first check if exists. then create.
-	public function getOrCreatePathToFolder(string $path, int $parent_id) {
-		$base_path = $this->getPathToFolder($parent_id);
+	public function getIdToFolderPath(string $path, int $parent_id) {
+		$parent_path = $this->getPathToFolder($parent_id);
 		$last_parent_id = $parent_id;
-		$last_relativer_dir = '';
-		$folder = false;
-		$map = [];
+		$last_relative_dir = '';
+		$folder_id = null;
 
 		$items = explode('/', $path);
 		foreach ($items as $key => $value) {
@@ -363,21 +363,20 @@ Class Folder{
 				$folder->name = $value;
 				$folder->normalized = strtoupper( Urlify::normalize_name($value, false) );
 				$folder->parent_id = $last_parent_id;
-				$path = $base_path . $last_relativer_dir . $folder->normalized . "/";
-
+				$path = $parent_path . $last_relative_dir . $folder->normalized . "/";
 				$row = $this->pathExists($path);
 				if ( $row ) {
 					$folder = (object) $row;
+					$folder_id = $folder->id;
 				} else {
-					$folder = $folder->add();
+					$folder_id = $folder->add()->id();
 				}
-				$map[ $path ] = $folder->id;
-				$last_parent_id = $folder->id;
-				$last_relativer_dir .= $folder->normalized . '/';
+				$last_parent_id = $folder_id;
+				$last_relative_dir .= $folder->normalized . '/';
 			}
 		}
 		
-		return $folder;
+		return $folder_id;
 	}
 
 	public function all(array $params = []) {
