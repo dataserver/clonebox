@@ -22,3 +22,4 @@ CloneBox is a simple file manager in php. Optimized for mobile
 - Toastr
 - Moment
 - BackDetect.js
+- FontAwesome 4.7
