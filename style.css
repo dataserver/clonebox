@@ -1,0 +1,173 @@
+/* ---------------------------------------------------
+	SIDEBAR STYLE
+----------------------------------------------------- */
+#sidebar {
+	z-index: 1100;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 240px;
+	min-width: 240px;
+	height: 100vh;
+	background: #F7F9FA;
+}
+#sidebar.active {
+	display: block;
+}
+#overlay-sidebar-under {
+	z-index: 1099;
+	position: fixed;
+	top: 0;
+	left: 0;
+	/* full screen */
+	width: 100vw;
+	height: 100vh;
+	display: none;
+	/* transparent black */
+	background: rgba(99,114,130,0.5);
+	/* middle layer, i.e. appears below the sidebar */
+	-webkit-transition: background-color 2s ease-out;
+	-moz-transition: background-color 2s ease-out;
+	-o-transition: background-color 2s ease-out;
+	transition: background-color 2s ease-out;
+}
+/* display .overlay when it has the .active class */
+#overlay-sidebar-under.active {
+	display: block;
+}
+.fixed-bottom {
+	z-index: 1101;
+}
+#sidebar LI{
+	margin-top: 1.5rem!important;
+	margin-bottom: 1.5rem!important;
+}
+#sidebar a {
+	font-size: 16px;
+	color: #637282;
+}
+#sidebar a.active {
+	font-size: 16px;
+	color: #007bff;
+}
+.search-icon {
+	position: absolute;
+	width: auto;
+	bottom: 0.5rem;
+	right: 1rem;
+	margin-top: 0;
+}
+/* ---------------------------------------------------
+	CONTENT STYLE
+----------------------------------------------------- */
+html,body {
+	font-family: 'Roboto', sans-serif;
+	font-size: 14px;
+	color: #3d464d;
+}
+/* ---------------------------------------------------
+	MODAL
+----------------------------------------------------- */
+.modal-footer {
+	border-top-style: none;
+	border-bottom-style: none;
+	background: #f6f9fc;
+	font-size: 13px;
+}
+.modal-body{
+	background: #f6f9fc;
+}
+.modal-header{
+	font-size: 18px;
+}
+.bootbox.modal {
+	z-index: 3000 !important;
+}
+/* ---------------------------------------------------
+	DROP ZONE
+----------------------------------------------------- */
+#overlay-dropzone {
+	/*visibility: hidden;*/
+	/*display: block;*/
+	display: none;
+	position: fixed;
+	/* full screen */
+	width: 100vw;
+	height: 100vh;
+	z-index: 1102;
+	background-color: rgba(0,0,0,0.5);
+	top: 0;
+	left: 0;
+}
+#overlay-select-directory {
+	display: none;
+	position: fixed;
+	/* full screen */
+	width: 100vw;
+	height: 100vh;
+	width: 100%;
+	height: 100%;
+	z-index: 1102;
+	/*background-color: rgba(0,0,0,0.5);  */
+	top: 0;
+	left: 0;
+}
+#overlay-search-file{
+	display: none;
+	position: fixed;
+	/* full screen */
+	width: 100vw;
+	height: 100vh;
+	width: 100%;
+	height: 100%;
+	z-index: 1103;
+	background-color: rgba(250,250,250,1);
+	top: 0;
+	left: 0;
+}
+/* ---------------------------------------------------
+	UPLOAD selector
+----------------------------------------------------- */
+#overlay-select-directory-options .active {
+	background: #D6E8FA;
+}
+#overlay-select-directory-options .row{
+	cursor: pointer;
+}
+/* ---------------------------------------------------
+	GRID items
+----------------------------------------------------- */
+.grid-item.selected{
+	background-color: #D6E8FA;
+}
+.grid-item.small{
+	width: 120px;
+	max-width: 120px;
+	min-height: 150px;
+	max-height: 200px;
+}
+.grid-item.small IMG{
+	max-height: 100px;
+	max-width: 100px;
+}
+.grid-item.large{
+	width: 240px;
+	max-width: 240px;
+	min-height: 240px;
+	max-height: 300px;
+}
+.grid-item.large IMG{
+	max-height: 220px;
+	max-width: 220px;
+}
+table.grid-items{
+	width: 100%;
+}
+
+/* ---------------------------------------------------
+	File Icons
+----------------------------------------------------- */
+
+/* ---------------------------------------------------
+	MEDIAQUERIES
+----------------------------------------------------- */

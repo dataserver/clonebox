@@ -1,0 +1,6 @@
+# disable directory listing
+Options -Indexes
+
+# show a custom message
+ErrorDocument 403 "Directory access is forbidden."
+IndexIgnore *
