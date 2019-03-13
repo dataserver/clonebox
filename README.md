@@ -12,13 +12,13 @@ CloneBox is a simple file manager in php. Optimized for mobile
 - Sqlite3 extension enabled
 
 ## sources and tools
-CodeIgniter
-SimpleImage
-Jquery
-Bootstrap
-Jsrender
-Lodash
-Jscookie
-Toastr
-Moment
-BackDetect.js
+- CodeIgniter
+- SimpleImage
+- Jquery
+- Bootstrap
+- Jsrender
+- Lodash
+- Jscookie
+- Toastr
+- Moment
+- BackDetect.js
