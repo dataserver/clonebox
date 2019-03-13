@@ -31,105 +31,18 @@ Class Folder{
 
 	}
 
-	public function isValid() {
-		if ( $this->valid ) {
-
-			return true;
-		}
-		
-		return false;
-	}
-
-	public function errors() {
-
-		return $this->_errors;
-	}
-
-	public function id() {
-
-		return (int) $this->id;
-	}
-	public function setId(int $id) {
-		$this->id = $id;
-
-		return $this;
-	}
-
-	public function setName(string $new_name) {
-		if ( !$this->valid ) {
-
-			return $this;
-		}
-		$this->name = $new_name;
-		$this->normalized = strtoupper( Urlify::normalize_name($this->name, false) );
-		$this->set();
-
-		return $this;
-	}
-	public function setShowSelf(bool $self = false) {
-		$this->show_self = $self;
-
-		return $this;
-	}
-
-	public function move(int $target_folder) {
-		if ( !$this->valid ) {
-
-			return $this;
-		}
-		$this->_node_move($this->id, $target_folder);
-		$this->parent_id = $target_folder;
-		$this->set();
-
-		$sub_folders = $this->_node_get_children($this->id, ['self' => true, 'data_type'=> 'flat']);
-		$this->updatePaths($sub_folders);
-
-		return $this;
-	}
-
-	public function exists(int $id = null) {
-		$id = ( !$id ) ? $this->id : (int) $id;
-
-		$stmt = $this->pdo->prepare(" SELECT * FROM folders WHERE id=:id LIMIT 1 ");
-		$stmt->bindValue(":id", $id, PDO::PARAM_INT);
-		$stmt->execute();
-		$row = $stmt->fetch(PDO::FETCH_ASSOC);
-		if ( $row ) {
-
-			return true;
-		}
-
-		return false;
-	}
-	public function pathExists(string $path) {
-
-		$stmt = $this->pdo->prepare(" SELECT * FROM folders WHERE path=:path LIMIT 1 ");
-		$stmt->bindValue(":path", $path, PDO::PARAM_STR);
-		$stmt->execute();
-		$row = $stmt->fetch(PDO::FETCH_ASSOC);
-		if ( $row ) {
-			return $row;
-		}
-
-		return false;
-	}
-
-	public function updatePaths(array $folders) {
-		foreach ($folders as $row) {
-			$folder = new self;
-			$folder->get($row['id']);
-			// $folder->path = $this->getPathToFolder($row['id']);
-			$folder->set();
-		}
-	}
-
+	/**
+	 * Save to database the current instance values
+	 * 
+	 * @return self return current instance
+	 */
 	public function add() {
 
 		try {
 			$this->pdo->beginTransaction();
 
 			$this->normalized = strtoupper( Urlify::normalize_name($this->name, false) );
-			$this->path = ( is_null($this->path) ) ? $this->getPathToFolder($this->parent_id) . $this->normalized . "/" : $this->path;
+			$this->path = ( is_null($this->path) ) ? $this->pathToFolder($this->parent_id) . $this->normalized . "/" : $this->path;
 
 			$stmt = $this->pdo->prepare("INSERT INTO folders 
 								   (name, normalized, parent_id, path, lastmodified_on, created_on) VALUES 
@@ -154,11 +67,50 @@ Class Folder{
 		return $this;
 	}
 
+	/**
+	 * Get from database the info from given $id or from instance defined id
+	 * 
+	 * @param int    $id folder_id, default is instance->id
+	 * @return self  return current instance
+	 */
+	public function get(int $id = null) {
+		$id = ( !$id ) ? $this->id : intval($id);
+		if ( $id < 1 ) {
+			$this->valid = false;
+
+			return $this;
+		}
+
+		$stmt = $this->pdo->prepare(" SELECT * FROM folders WHERE id=:id LIMIT 1");
+		$stmt->bindValue(":id", $id, PDO::PARAM_INT);
+		$stmt->execute();
+		$row = $stmt->fetch(PDO::FETCH_ASSOC);
+		if ( $row ) {
+			$this->id = $row['id'];
+			$this->parent_id = $row['parent_id'];
+			$this->name = $row['name'];
+			$this->normalized = $row['normalized'];
+			$this->path = $row['path'];
+			$this->lastmodified_on = $row['lastmodified_on'];
+			$this->created_on = $row['created_on'];
+		} else {
+			$this->valid = false;
+			$this->_errors[] = 'no record found';
+		}
+
+		return $this;
+	}
+
+	/**
+	 * Save to database the current instance values
+	 * 
+	 * @return self  return current instance
+	 */
 	public function set() {
 
 		try {
 			$this->pdo->beginTransaction();
-			$this->path = $this->getPathToFolder($this->parent_id) . $this->normalized . "/";
+			$this->path = $this->pathToFolder($this->parent_id) . $this->normalized . "/";
 
 			$stmt = $this->pdo->prepare("UPDATE folders SET 
 												parent_id=:parent_id,
@@ -193,7 +145,14 @@ Class Folder{
 		return $this;
 }
 
-	// https://stackoverflow.com/questions/6802539/hierarchical-tree-database-for-directories-in-filesystem
+	
+	/**
+	 * Delete current node, all files will be deleted too
+	 * // https://stackoverflow.com/questions/6802539/hierarchical-tree-database-for-directories-in-filesystem
+	 * 
+	 * @param int      $id folder_id
+	 * @return self    return current instance
+	 */
 	public function delete(int $id = null) {
 		$id = ( !$id ) ? $this->id : $id;
 		if (!$this->valid) {
@@ -221,7 +180,13 @@ Class Folder{
 		return $this;
 	}
 
-	// https://stackoverflow.com/questions/6802539/hierarchical-tree-database-for-directories-in-filesystem
+	/**
+	 * Move current instance folder to target node
+	 * // https://stackoverflow.com/questions/6802539/hierarchical-tree-database-for-directories-in-filesystem
+	 * 
+	 * @param array    $array of folders ids
+	 * @return self    return current instance
+	 */
 	public function deleteBatch(array $ids_array) {
 		if ( !$this->valid ) {
 
@@ -245,52 +210,160 @@ Class Folder{
 		return $this;
 	}
 
-	public function get(int $id = null) {
-		$id = ( !$id ) ? $this->id : intval($id);
-		if ( $id < 1 ) {
-			$this->valid = false;
+	/**
+	 * Move current instance folder to target node
+	 * 
+	 * @param int     $target_folder  folder id
+	 * @return self   return current instance
+	 */
+	public function move(int $target_folder) {
+		if ( !$this->valid ) {
 
 			return $this;
 		}
+		$this->_node_move($this->id, $target_folder);
+		$this->parent_id = $target_folder;
+		$this->set();
 
-		$stmt = $this->pdo->prepare(" SELECT * FROM folders WHERE id=:id LIMIT 1");
-		$stmt->bindValue(":id", $id, PDO::PARAM_INT);
-		$stmt->execute();
-		$row = $stmt->fetch(PDO::FETCH_ASSOC);
-		if ( $row ) {
-			$this->id = $row['id'];
-			$this->parent_id = $row['parent_id'];
-			$this->name = $row['name'];
-			$this->normalized = $row['normalized'];
-			$this->path = $row['path'];
-			$this->lastmodified_on = $row['lastmodified_on'];
-			$this->created_on = $row['created_on'];
-		} else {
-			$this->valid = false;
-			$this->_errors[] = 'no record found';
-		}
+		$sub_folders = $this->_node_get_children($this->id, ['self' => true, 'data_type'=> 'flat']);
+		$this->pathUpdate($sub_folders);
 
 		return $this;
 	}
 
+	/**
+	 * Check if operations in chain was valid. You can check errors using $this->errors()
+	 * 
+	 * @return bool
+	 */
+	public function isValid() {
+		if ( $this->valid ) {
+
+			return true;
+		}
+		
+		return false;
+	}
+
+	/**
+	 * Return errors in a chain of operations
+	 * 
+	 * @return array of errors
+	 */
+	public function errors() {
+
+		return $this->_errors;
+	}
+
+	/**
+	 * Return current id
+	 * 
+	 * @return int
+	 */
+	public function id() {
+
+		return (int) $this->id;
+	}
+
+	/**
+	 * Set current node_id
+	 * 
+	 * @param int     $id
+	 * @return self   return current instance
+	 */
+	public function setId(int $id) {
+		$this->id = $id;
+
+		return $this;
+	}
+
+	/**
+	 * Set new name for the folder
+	 * 
+	 * @param string  $new_name
+	 * @return self   return current instance
+	 */
+	public function setName(string $new_name) {
+		if ( !$this->valid ) {
+
+			return $this;
+		}
+		$this->name = $new_name;
+		$this->normalized = strtoupper( Urlify::normalize_name($this->name, false) );
+		$this->set();
+
+		return $this;
+	}
+
+	/**
+	 * Set if result in chain MUST include the current node
+	 * 
+	 * @param bool    $self, default is false
+	 * @return self   return current instance
+	 */
+	public function setShowSelf(bool $self = false) {
+		$this->show_self = $self;
+
+		return $this;
+	}
+
+	/**
+	 * Return true or false if folder_id exists
+	 * 
+	 * @param int   $id folder_id
+	 * @return bool 
+	 */
+	public function exists(int $id = null) {
+		$id = ( !$id ) ? $this->id : (int) $id;
+
+		$stmt = $this->pdo->prepare(" SELECT * FROM folders WHERE id=:id LIMIT 1 ");
+		$stmt->bindValue(":id", $id, PDO::PARAM_INT);
+		$stmt->execute();
+		$row = $stmt->fetch(PDO::FETCH_ASSOC);
+		if ( $row ) {
+
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Get direct children of given folder id
+	 * 
+	 * @param int    $id folder_id
+	 * @return array  associated rows
+	 */
+
 	public function children(int $id = null) {
 		$id = ( !$id ) ? $this->id : $id;
-		if ( !$this->children ){
+		if ( !$this->children ) {
 			$this->children = $this->_get_children($id);
 		}
 
 		return $this->children;
 	}
 
+	/**
+	 * Return array of files belong to given folder_id
+	 * @param int $id folder id
+	 * @return array
+	 */
 	public function files(int $id = null) {
 		$id = ( !$id ) ? $this->id : $id;
-		if ( !$this->files ){
+		if ( !$this->files ) {
 			$this->files = $this->_get_files($id);
 		}
 
 		return $this->files;
 	}
 
+	/**
+	 * Return descendents folders of a given node.
+	 * 
+	 * @param int     $folder_id, default is null returning complete tree
+	 * @return array  @array in nested representation of descendents folders
+	 */
 	public function nested(int $id = null) {
 		$id = ( !$id ) ? $this->id : $id;
 		if ( !$this->nested ) {
@@ -302,6 +375,12 @@ Class Folder{
 		return $this->nested;
 	}
 
+	/**
+	 * Return descendents folders of a given node.
+	 * 
+	 * @param int     $folder_id, default is null returning complete tree
+	 * @return array  @array of associated values. 'flat' format
+	 */
 	public function descendents(int $id = null) {
 		$id = ( !$id ) ? $this->id : $id;
 		if ( !$this->descendents ) {
@@ -313,6 +392,12 @@ Class Folder{
 		return $this->descendents;
 	}
 
+	/**
+	 * Return ancestors folders of a given node.
+	 * 
+	 * @param int     $folder_id, default is null returning complete tree
+	 * @return array  flat array of associated values
+	 */
 	public function ancestors(int $id = null) {
 		$id = ( !$id ) ? $this->id : $id;
 		if ( !$this->ancestors ){
@@ -322,13 +407,54 @@ Class Folder{
 		return $this->ancestors;
 	}
 
-	public function breadcrumbs(int $id = null) {
-		$id = (!$id) ? $this->id : $id;
+	/**
+	 * Return ancestors folders of current node.
+	 * 
+	 * @param int     $folder_id, default is null returning complete tree
+	 * @return array  flat array of associated values
+	 */
+	public function breadcrumbs(int $folder_id = null) {
+		$folder_id = (!$folder_id) ? $this->id : $folder_id;
 		if ( !$this->breadcrumbs ) {
-			$this->breadcrumbs = $this->_node_get_parent($id, ['self' => $this->show_self]);
+			$this->breadcrumbs = $this->_node_get_parent($folder_id, ['self' => $this->show_self]);
 		}
 
 		return $this->breadcrumbs;
+	}
+
+	/**
+	 * Return info from folder with a give path
+	 * 
+	 * @param string  $path of folder e.g. HOME/ABC/XYZ/
+	 * @return mixed  array of associated values of folder with given $path, return false if no folder is found
+	 */
+	public function pathExists(string $path) {
+
+		$path = strtoupper($path);
+		$stmt = $this->pdo->prepare(" SELECT * FROM folders WHERE path=:path LIMIT 1 ");
+		$stmt->bindValue(":path", $path, PDO::PARAM_STR);
+		$stmt->execute();
+		$row = $stmt->fetch(PDO::FETCH_ASSOC);
+		if ( $row ) {
+			return $row;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Update database field info 'path'
+	 * 
+	 * @param array $folders_ids
+	 * @return void
+	 */
+	public function pathUpdate(array $folders) {
+		foreach ($folders as $row) {
+			$folder = new self;
+			$folder->get($row['id']);
+			// $folder->path = $this->pathToFolder($row['id']);
+			$folder->set();
+		}
 	}
 
 	/***
@@ -336,7 +462,7 @@ Class Folder{
 	 * 
 	 * @param int $id = id of folder
 	 */
-	public function getPathToFolder(int $id = null) {
+	public function pathToFolder(int $id = null) {
 		$id = (!$id) ? $this->id : $id;
 		if ( !$this->breadcrumbs ) {
 			$this->breadcrumbs = $this->_node_get_parent($id, ['self' => true]);
@@ -348,10 +474,19 @@ Class Folder{
 		}
 		return $path;
 	}
-	// Home/Xyz/Abc
-	// first check if exists. then create.
-	public function getIdToFolderPath(string $path, int $parent_id) {
-		$parent_path = $this->getPathToFolder($parent_id);
+
+	/**
+	 * Return folder id of a path.
+	 * Create, if required, database for each part(folder/directory) of path
+	 * e.g. xxx/yyy/abc
+	 * if none of this path exists, 3 new database entries will be created: xxx, yyy and abc. 
+	 * The id of last subfolder (abc) will be returned.
+	 * 
+	 * @param string $path path relative to parent_id
+	 * @param int    $parent_id
+	 */
+	public function getIdpathToFolder(string $path, int $parent_id) {
+		$parent_path = $this->pathToFolder($parent_id);
 		$last_parent_id = $parent_id;
 		$last_relative_dir = '';
 		$folder_id = null;
@@ -379,6 +514,13 @@ Class Folder{
 		return $folder_id;
 	}
 
+	/**
+	 * Return all folders in the database, default order is normalized name
+	 * 
+	 * @param array $params [
+	 * 	'orderby' => "normalized"   // database field to be used, default normalize ASC
+	 * ]
+	 */
 	public function all(array $params = []) {
 
 		$default_options = [
@@ -401,6 +543,12 @@ Class Folder{
 		return [];
 	}
 
+	/**
+	 * Return array of folders from array of ids
+	 * 
+	 * @param array  $ids_array array of ids.
+	 * @return array $rows of associdated array from database. 
+	 */
 	public function getBatch(array $ids_array) {
 		$rows = [];
 
@@ -437,7 +585,12 @@ Class Folder{
  *    888                                                   
  */
 
-
+	/**
+	 * Return direct children folders of given $folder_id
+	 * 
+	 * @param int     $folder_id
+	 * @return mixed  $array of associated rows or false if none is found
+	 */
 	private function _get_children(int $folder_id) {
 
 		$stmt = $this->pdo->prepare(" SELECT * FROM folders WHERE parent_id=:id ");
@@ -453,7 +606,13 @@ Class Folder{
 		}
 		return false;
 	}
-	
+
+	/**
+	 * Return all descendents folders of a given $folder_id
+	 * 
+	 * @param int    $folder_id
+	 * @return mixed $array of rows or false if none is found
+	 */
 	private function _get_descendents(int $folder_id) {
 
 		$rows = $this->_node_get_children($folder_id, ['self' => false, 'data_type'=> 'mixed']);
@@ -464,6 +623,12 @@ Class Folder{
 		return false;
 	}
 
+	/**
+	 * Return all files with folder id = $folder_id
+	 * 
+	 * @param int    $folder_id
+	 * @return array $array of associated rows
+	 */
 	private function _get_files(int $folder_id) {
 
 		$stmt = $this->pdo->prepare(" SELECT * FROM files WHERE folder_id=:folder_id ");
@@ -479,6 +644,12 @@ Class Folder{
 		return [];
 	}
 
+	/**
+	 * Delete all files belong to specific folder_id
+	 * 
+	 * @param int     @folder_id
+	 * @return mixed  number of deleted files or false when none has being deleted
+	 */
 	private function _delete_folder_files(int $folder_id) {
 
 		try {
@@ -527,7 +698,14 @@ Class Folder{
 	 *                                                                                                         
 	 */
 	// https://gist.github.com/dazld/2174233
-
+	/**
+	 * 
+	 * Add node to a tree
+	 * 
+	 * @param  int    $node_id (folder_id) of node that will be added.
+	 * @param  int    $target_id target location of new node
+	 * @return bool   result of insertion
+	 */
 	private function _node_add(int $node_id, int $target_id = 1) {
 
 		$query = " INSERT INTO tree_path (ancestor, descendant, depth)
@@ -558,7 +736,7 @@ Class Folder{
 	 * 
 	 * @param  int      node id
 	 * @param  boolean  if TRUE, it will also delete from reference table
-	 * @return mixed
+	 * @return boolean  return result of operation
 	 */
 	private function _node_delete(int $node_id, bool $delete_reference = true)
 	{
@@ -870,6 +1048,12 @@ Class Folder{
 		}
 	}
 
+	/**
+	 * Delete server files ($row['saved_as'] and $row['thumbnail'])
+	 * 
+	 * @param array  $array of associated entries array
+	 * @return void
+	 */
 	private function _delete_server_files(array $files_rows = []) {
 
 		foreach ($files_rows as $row) {
@@ -884,7 +1068,16 @@ Class Folder{
 		}
 	}
 
-	private function _filter_ids_array2(array $array = []) {
+	/**
+	 * 
+	 * Filter array to make sure are integer values,
+	 * remove empty values and convert strings to int
+	 * 
+	 * @param array   $array array of ids array("1", "", 2, " 3 ", 4, 5)
+	 *
+	 * @return array  $array of int ids array(1, 2, 3, 4, 5)
+	 */
+	private function _filter_ids_array(array $array = []) {
 		$array = array_filter( $array, 'strlen' );
 		$array = array_map(function($value) {
 
@@ -894,17 +1087,13 @@ Class Folder{
 		return $array;
 	}
 
-	private function _filter_ids_array(array $array = []) {
-		$array = filter_var($array, FILTER_VALIDATE_INT, [
-													  'flags'   => FILTER_REQUIRE_ARRAY,
-													  'options' => ['min_range' => 1]
-													]
-						);
-		$filtered = array_filter($array, 'is_int');
-
-		return $filtered;
-	}
-
+	/**
+	 * Generated a nested array from flat array with id && parent_id props
+	 * 
+	 * @param array   $flatArray
+	 * @param int     $root_id, from wich node should the nested array be returned. by default is 0,i.e., the ROOT
+	 * @return array  nested array
+	 */
 	private function _generate_nested_array( array $flatArray, int $root_id = 0 )
 	{
 	
