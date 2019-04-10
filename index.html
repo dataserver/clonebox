@@ -6,7 +6,6 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<title>Home - CloneBox</title>
-
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha256-YLGeXaapI0/5IgZopewRJcFXomhRMlYYjugPLSyNjTY=" crossorigin="anonymous">
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous">
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css" integrity="sha256-R91pD48xW+oHbpJYGn5xR0Q7tMhH4xOrWn1QqMRINtA=" crossorigin="anonymous">
@@ -18,7 +17,7 @@
 <div class="d-flex mt-5">
 		<div id="right-flexbox">
 <!-- left sidebar -->
-			<div              class="d-none d-lg-block" style="width: 240px;max-width: 240px;">
+			<div class="d-none d-lg-block" style="width: 240px;max-width: 240px;">
 				<!-- on screen bigger than LG show #sider = position:fixed 0,0 -->
 			</div>
 			<nav id="sidebar" class="d-none d-lg-block">
@@ -51,8 +50,8 @@
 						<div class="row mt-5">
 							<div class="col-10">
 								<div id="breadcrumbs">
-
 									
+
 
 								</div>
 							</div>
@@ -75,8 +74,8 @@
 								<!-- blank space at bottom -->
 							</div>
 						</div>
-				</div>
 <!-- /main content -->
+				</div>
 		</div>
 		<div id="left-flexbox" class="d-none d-lg-block">
 <!-- right sidebar -->
@@ -99,7 +98,6 @@
 			<div class="col d-none d-lg-block" style="width: 240px;max-width: 240px;">
 			</div>
 			<div class="col">
-
 				<div class="row">
 					<div class="col-8 ml-auto" id="fixed-top-form-search-col-left">
 						<div class=" d-lg-none align-self-center ml-auto">
@@ -118,7 +116,7 @@
 												    	      <i class="fa fa-search"></i>
 												    	 </div>
 												</div>
-											</div>								
+											</div>
 										</div>
 									</div>
 									<div id="nav-search-options" class="row" style="display: none;">
@@ -136,18 +134,16 @@
 		</div>
 	</div>
 </nav>
-<!-- /SEARCH -->
+
 <div class="fixed-bottom">
 	<div id="progressbars">
-		
+
 	</div>
 </div>
-
 
 <!-- OVERLAYS -->
 <div id="overlay-sidebar-under"></div>
 <div id="overlay-dropzone"></div>
-
 <div id="overlay-select-directory" class="" style="display: none;">
 		<div class="container h-100">
 			<div class="row h-100 justify-content-center align-items-center">
@@ -177,22 +173,19 @@
 			</div>
 		</div>
 </div>
-
 <div id="overlay-search-file" class="" style="display: none;">
-<p>Begin typing to search</p>
-<P>Search for files, folders, and content</P>
-	<form id="form-search-file">
-		<input type="text" name="file" autofocus="autofocus">
-	</form>
-	<div id="search-file-results">
-		
-	</div>
+		<p>Begin typing to search</p>
+		<P>Search for files, folders, and content</P>
+		<form id="form-search-file">
+			<input type="text" name="file" autofocus="autofocus">
+		</form>
+		<div id="search-file-results">
+			
+		</div>
 </div>
 
 
-
 <!-- TEMPLATES -->
-
 <script id="template-breadcrumbs" type="text/x-jsrender">
 	{{for breadcrumbs  ~lastindex=breadcrumbs.length}}
 			{{if #getIndex() != ~lastindex-1}}
@@ -204,7 +197,6 @@
 				/  <a class="js-folder-view" data-id="1" data-name="Home" href="#"><b>CloneBox</b></a>
 	{{/for}}
 </script>
-
 <script id="template-items-table-thead" type="text/x-jsrender">
 	<thead>
 		<tr class="border-bottom my-4">
@@ -281,7 +273,6 @@
 		</tr>
 	</thead>
 </script>
-
 <script id="template-items-table-tr" type="text/x-jsrender">
 {{if type=="folder"}}
 		<td>
@@ -314,9 +305,7 @@
 				</div>
 			</div>
 		</td>
-
 {{else}}
-
 		<td>
 			<div class="custom-control custom-checkbox">
 				<input class="custom-control-input js-input-checkbox" id="input_file_id_{{:id}}" type="checkbox" data-type="file" data-id="{{:id}}" name="files[]" value="{{:id}}">
@@ -351,13 +340,9 @@
 				</div>
 			</div>
 		</td>
-
 {{/if}}
- 
 </script>
-
 <script id="template-items-grid-header" type="text/x-jsrender">
-
 		<div class="row border-bottom my-4">
 			<div class="col-sm-1">
 				<div class="custom-control custom-checkbox">
@@ -430,9 +415,7 @@
 				</div>
 			</div>
 		</div>
-
 </script>
-
 <script id="template-items-grid-card" type="text/x-jsrender">
 	<div class="grid-item m-2" data-type="{{:type}}" data-id="{{:id}}">
 		{{if type=="folder"}}
@@ -517,7 +500,6 @@
 </script>
 
 
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js" integrity="sha256-fzFFyH01cBVPYzl16KT40wqjhgPtq6FFUB6ckN2+GGw=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jsrender/1.0.2/jsrender.min.js" integrity="sha256-hd/uw4FMRrVcuSBTkik17X3zMo4cASwOARGQqDrazFo=" crossorigin="anonymous"></script>
@@ -526,15 +508,11 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.11/lodash.min.js" integrity="sha256-7/yoZS3548fXSRXqc/xYzjsmuW3sFKzuvOCHd06Pmps=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js" integrity="sha256-4iQZ6BVL4qNKlQ27TExEhBN1HFPvAvAMbFavKKosSWQ=" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootbox@5.0.1/dist/bootbox.all.min.js" integrity="sha256-Kb4eY/DaqVbcuL7cT2JDmTZqRJzIOt90SKXBXKSF9ds=" crossorigin="anonymous"></script>
-
-<script src="lib/urlify.js"></script>
+<script src="lib/urlify.min.js"></script>
 
 <script src="script.js?123456"></script>
-
-<script>
+<script type="'text/javascript">
 $(document).ready(function() {
-
-
 
 });
 </script>

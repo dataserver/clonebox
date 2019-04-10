@@ -10,7 +10,10 @@ include_once APP_PATH.'lib/SimpleImage.php';
 include_once APP_PATH.'lib/Urlify.php';
 include_once APP_PATH.'lib/Hook.inc.php';
 include_once APP_PATH.'lib/MyPDO.php';
-include_once APP_PATH.'lib/File.inc.php';
+
+include_once APP_PATH.'lib/IFileRepository.php';
+include_once APP_PATH.'lib/FileRepository.php';
+include_once APP_PATH.'lib/File.php';
 include_once APP_PATH.'lib/Folder.inc.php';
 include_once APP_PATH.'lib/Request.inc.php';
 include_once APP_PATH.'lib/misc.func.php';
@@ -18,6 +21,7 @@ include_once APP_PATH.'lib/misc.func.php';
 chdir(__DIR__);
 $request = new Request();
 $hook = new Hook();
+$pdo = MyPDO::instance();
 
 $folder_id = (int) $request->getPostGet('folder', FILTER_SANITIZE_NUMBER_INT);
 $file_id = (int) $request->getPostGet('file', FILTER_SANITIZE_NUMBER_INT);
@@ -299,7 +303,7 @@ switch ($action) {
 
     case 'get-all':
         $folder = new Folder();
-        $file = new File();
+        $file = new FileRepository();
 
         $json = [
             'method' => 'get.all',
@@ -312,14 +316,15 @@ switch ($action) {
         break;
 
     case 'get-files-all':
-        $files = new File();
-
+        $files = new FileRepository();
+        $result = $files->findAll();
+        var_dump($result);
         $json = [
             'method' => 'get.files.all',
             'code' => 200,
             'data' => [
                 // 'breadcrumbs' => [],
-                'items' => $files->all(),
+                'items' => $result,
             ],
         ];
         break;
