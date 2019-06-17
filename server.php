@@ -603,8 +603,11 @@ switch ($action) {
             ],
         ];
 }
-
-ob_start('ob_gzhandler');
+if (extension_loaded('zlib')){
+    ob_end_clean();
+    ob_start('ob_gzhandler');
+}
+//ob_start('ob_gzhandler');
 http_response_code($json['code']);
 header('Content-type: application/json');
 echo json_encode($json);
