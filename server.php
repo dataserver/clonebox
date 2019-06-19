@@ -493,8 +493,8 @@ switch ($action) {
                     return intval($value);
                 }, $files_ids);
                 $files = new File();
-                $files->getBatch($files_ids);
-                foreach ($files as $key => $file) {
+                $rows = $files->getBatch($files_ids);
+                foreach ($rows as $key => $file) {
                     $name = basename($file['name'], '.'.$file['extension']);
                     $zip->addFile(CONFIG['base_path_store'].$file['saved_as'], $name.'.'.$file['extension']);
                 }
