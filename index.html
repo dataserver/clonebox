@@ -7,7 +7,8 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<title>Home - CloneBox</title>
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha256-YLGeXaapI0/5IgZopewRJcFXomhRMlYYjugPLSyNjTY=" crossorigin="anonymous">
-		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/fontawesome.min.css" integrity="sha256-H9ochMml3Lh6FE/KKTUFfw2hD7mxc9c8pXoqfIso5Zk=" crossorigin="anonymous" />
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/solid.min.css" integrity="sha256-v5SPY4JGcV56xf0vZ7ZDISaNjURA4Yfy0mozoIBd4X0=" crossorigin="anonymous" />
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css" integrity="sha256-R91pD48xW+oHbpJYGn5xR0Q7tMhH4xOrWn1QqMRINtA=" crossorigin="anonymous">
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
 		<link rel="stylesheet" href="style.css">
@@ -24,7 +25,7 @@
 				<div class="container-fluid">
 					<div class="row mt-5">
 						<div class="col pl-5">
-							<h2 class="js-folder-view" data-id="1" data-name="Home" ><i class="fa fa-archive" aria-hidden="true" data-alt="CloneBox icon" style="color:#0062ff;"></i></h2>
+							<h2 class="js-folder-view" data-id="1" data-name="Home" ><i class="fas fa-archive" data-alt="CloneBox icon" style="color:#0062ff;"></i></h2>
 							<div class="mt-5">
 								<ul class="list-unstyled">
 									<li class="my-4">
@@ -82,7 +83,7 @@
 				<div class="pr-3" style="width:200px;">
 					<div class="mt-5">
 						<form id="form-upload">
-							<button type="button" class="btn btn-primary btn-block js-form-upload-btn-upload"><i class="fa fa-cloud-upload" aria-hidden="true"></i> Upload</button>
+							<button type="button" class="btn btn-primary btn-block js-form-upload-btn-upload"><i class="fas fa-file-upload"></i> Upload</button>
 							<input type="file" id="form-upload-input-file" name="form-upload-input-file"  multiple style="display: none;" hidden="hidden">
 						</form>
 					</div>
@@ -101,7 +102,7 @@
 				<div class="row">
 					<div class="col-8 ml-auto" id="fixed-top-form-search-col-left">
 						<div class=" d-lg-none align-self-center ml-auto">
-							<span id="js-sidemenu-open" class="h3" aria-expanded="false" style="cursor:pointer;"><i class="fa fa-bars" aria-hidden="true"></i></span>
+							<span id="js-sidemenu-open" class="h3" aria-expanded="false" style="cursor:pointer;"><i class="fas fa-bars"></i></span>
 						</div>
 					</div>	
 					<div class="col-4 mr-auto" id="fixed-top-form-search-col-right">
@@ -113,7 +114,7 @@
 													 	<label for="search"></label>
 												     	<input type="text" class="form-control rounded-pill" placeholder=" Search" id="nav-input-search" name="search">
 												    	<div class="search-icon">
-												    	      <i class="fa fa-search"></i>
+												    	      <i class="fas fa-search"></i>
 												    	 </div>
 												</div>
 											</div>
@@ -198,6 +199,18 @@
 	{{/for}}
 </script>
 <script id="template-items-table-thead" type="text/x-jsrender">
+        <div class="js-checkbox-bulk-cmds" style="visibility:hidden;">
+            <div class="row text-right">
+                <div class="col" style="z-index:2;">
+                    <a class="js-checked-download" href="#" style=""><i class="fas fa-cloud-download-alt fa-lg" aria-hidden="true" style="color:blue;"></i> Download</a> 
+                    &nbsp;
+                    <a class="js-checked-move" href="#" style=""><i class="fas fa-suitcase fa-lg" aria-hidden="true" style="color:blue;"></i> Move</a>
+                    &nbsp;
+                    <a class="js-checked-delete" href="#" style="""><i class="fas fa-trash fa-lg" aria-hidden="true" style="color:blue;"></i> Delete</a>
+                    &nbsp;
+                </div>
+            </div>
+        </div>
 	<thead>
 		<tr class="border-bottom my-4">
 			<td class="">
@@ -235,23 +248,23 @@
 				<div class="btn-group">
 					<div class="dropdown" id="section-grid-view">
 						<button id="b_1" type="button" class="btn btn-sm dropdown-toggle" data-toggle="dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-							<i class="fa fa-list" aria-hidden="true"></i>
+							<i class="fas fa-list" aria-hidden="true"></i>
 						</button>
 						<div class="dropdown-menu dropdown-menu-right" aria-labelledby="b_1">
 							<h6 class="dropdown-header">VIEW AS</h6>
 							<button class="dropdown-item js-grid-view" data-grid="small" data-columns="4">
 								<div class="row">
-									<div class="col">Small</div><div class="col text-right"><i class="fa fa-th" aria-hidden="true"></i></div>
+									<div class="col">Small</div><div class="col text-right"><i class="fas fa-th" aria-hidden="true"></i></div>
 								</div>
 							</button>
 							<button class="dropdown-item js-grid-view" data-grid="large" data-columns="2">
 								<div class="row">
-									<div class="col">Large</div><div class="col text-right"><i class="fa fa-th-large" aria-hidden="true"></i></div>
+									<div class="col">Large</div><div class="col text-right"><i class="fas fa-th-large" aria-hidden="true"></i></div>
 								</div>
 							</button>
 							<button class="dropdown-item js-grid-view" data-grid="list" data-columns="1">
 								<div class="row">
-									<div class="col">List</div><div class="col text-right"><i class="fa fa-list" aria-hidden="true"></i></div>
+									<div class="col">List</div><div class="col text-right"><i class="fas fa-th-list" aria-hidden="true"></i></div>
 								</div>
 							</button>
 						</div>
@@ -261,11 +274,8 @@
 							<i class="fa fa-ellipsis-h" aria-hidden="true"></i>
 						</button>
 						<div class="dropdown-menu dropdown-menu-right" aria-labelledby="b_2">
-							<a class="js-form-upload-btn-upload dropdown-item" href="#"><i class="fa fa-cloud-upload" aria-hidden="true" style="color:blue;"></i> &nbsp; Upload</a>
-							<a class="js-folder-create dropdown-item" href="#"><i class="fa fa-folder-o" aria-hidden="true" style="color:blue;"></i> &nbsp; New Folder</a>
-							<a class="js-checked-download dropdown-item" href="#" style="display:none;"><i class="fa fa-download" aria-hidden="true" style="color:blue;"></i> &nbsp; Download</a>
-							<a class="js-checked-move dropdown-item" href="#" style="display:none;"><i class="fa fa-suitcase" aria-hidden="true" style="color:blue;"></i> &nbsp; Move</a>
-							<a class="js-checked-delete dropdown-item" href="#" style="display:none;"><i class="fa fa-trash-o" aria-hidden="true" style="color:blue;"></i> &nbsp; Delete</a>
+							<a class="js-form-upload-btn-upload dropdown-item" href="#"><i class="fas fa-cloud-upload" aria-hidden="true" style="color:blue;"></i> &nbsp; Upload</a>
+							<a class="js-folder-create dropdown-item" href="#"><i class="fas fa-folder-o" aria-hidden="true" style="color:blue;"></i> &nbsp; New Folder</a>
 						</div>
 					</div>
 				</div>
@@ -316,7 +326,7 @@
 			{{if thumbnail}}
 				<img src="thumbs/{{:thumbnail}}" class="p-1" style="max-height: 342px; max-width: 35px;">
 			{{else}}
-				<i class="fa fa-file-o fa-2x" aria-hidden="true" style="color:#549fe9;"></i>
+				<i class="fas fa-file fa-2x" aria-hidden="true" style="color:#549fe9;"></i>
 			{{/if}}
 			{{:name}}
 		</td>
@@ -343,8 +353,18 @@
 {{/if}}
 </script>
 <script id="template-items-grid-header" type="text/x-jsrender">
-		<div class="row border-bottom my-4">
-			<div class="col-sm-1">
+        <div class="row js-checkbox-bulk-cmds" style="visibility: hidden;">
+            <div class="col text-right" style="z-index:2;">
+                <a class="js-checked-download" href="#" style=""><i class="fas fa-cloud-download-alt fa-lg" aria-hidden="true" style="color:blue;"></i> Download</a> 
+                &nbsp;
+                <a class="js-checked-move" href="#" style=""><i class="fas fa-suitcase fa-lg" aria-hidden="true" style="color:blue;"></i> Move</a>
+                &nbsp;
+                <a class="js-checked-delete" href="#" style="""><i class="fas fa-trash fa-lg" aria-hidden="true" style="color:blue;"></i> Delete</a>
+                &nbsp;
+            </div>
+        </div>
+		<div class="row border-bottom">
+			<div class="col">
 				<div class="custom-control custom-checkbox">
 					<input class="custom-control-input" id="js-checkbox-all" type="checkbox" name="check_all" value="0">
 					<label class="custom-control-label" for="js-checkbox-all"></label>
@@ -369,33 +389,27 @@
 					</div>
 				</div>
 			</div>
-			<div class="col d-none d-md-block">
-				Modified
-			</div>
-			<div class="col d-none d-lg-block">
-				Size
-			</div>
 			<div class="col text-right" id="section-grid-button">
 				<div class="btn-group">
 					<div class="dropdown">
 						<button id="b_1" type="button" class="btn btn-sm dropdown-toggle" data-toggle="dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-							<i class="fa fa-list" aria-hidden="true"></i>
+							<i class="fas fa-list" aria-hidden="true"></i>
 						</button>
 						<div class="dropdown-menu dropdown-menu-right" aria-labelledby="b_1">
 							<h6 class="dropdown-header">VIEW AS</h6>
 							<button class="dropdown-item js-grid-view" data-grid="small" data-columns="4">
 								<div class="row">
-									<div class="col">Small</div><div class="col text-right"><i class="fa fa-th" aria-hidden="true"></i></div>
+									<div class="col">Small</div><div class="col text-right"><i class="fas fa-th" aria-hidden="true"></i></div>
 								</div>
 							</button>
 							<button class="dropdown-item js-grid-view" data-grid="large" data-columns="2">
 								<div class="row">
-									<div class="col">Large</div><div class="col text-right"><i class="fa fa-th-large" aria-hidden="true"></i></div>
+									<div class="col">Large</div><div class="col text-right"><i class="fas fa-th-large" aria-hidden="true"></i></div>
 								</div>
 							</button>
 							<button class="dropdown-item js-grid-view" data-grid="list" data-columns="1">
 								<div class="row">
-									<div class="col">List</div><div class="col text-right"><i class="fa fa-list" aria-hidden="true"></i></div>
+									<div class="col">List</div><div class="col text-right"><i class="fas fa-th-list" aria-hidden="true"></i></div>
 								</div>
 							</button>
 						</div>
@@ -405,11 +419,8 @@
 							<i class="fa fa-ellipsis-h" aria-hidden="true"></i>
 						</button>
 						<div class="dropdown-menu dropdown-menu-right" aria-labelledby="b_2">
-							<a class="js-folder-create dropdown-item" href="#"><i class="fa fa-folder-o" aria-hidden="true" style="color:blue;"></i> &nbsp; New Folder</a>
-							<a class="js-checked-download dropdown-item" href="#"><i class="fa fa-download" aria-hidden="true" style="color:blue;"></i> &nbsp; Download</a>
-							<a class="js-check-move dropdown-item" href="#"><i class="fa fa-sign-in" aria-hidden="true" style="color:blue;"></i> &nbsp; Move</a>
-							<a class="js-check-copy dropdown-item" href="#"><i class="fa fa-files-o" aria-hidden="true" style="color:blue;"></i> &nbsp; Copy</a>
-							<a class="js-checked-delete dropdown-item" href="#"><i class="fa fa-trash-o" aria-hidden="true" style="color:blue;"></i> &nbsp; Delete</a>
+                            <a class="js-form-upload-btn-upload dropdown-item" href="#"><i class="fas fa-cloud-upload" aria-hidden="true" style="color:blue;"></i> &nbsp; Upload</a>
+							<a class="js-folder-create dropdown-item" href="#"><i class="fas fa-folder-o" aria-hidden="true" style="color:blue;"></i> &nbsp; New Folder</a>
 						</div>
 					</div>
 				</div>
@@ -431,7 +442,7 @@
 								<div class="col text-right">
 									<div class="btn-group">
 										<button type="button" id="btn_group2_id_{{:id}}" class="btn btn-sm border rounded-sm" data-toggle="dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-											<i class="fa fa-ellipsis-h" aria-hidden="true"></i>
+											<i class="fas fa-ellipsis-h" aria-hidden="true"></i>
 										</button>
 										<div class="dropdown-menu dropdown-menu-right" aria-labelledby="btn_group2_id_{{:id}}">
 											<a class="js-folder-download dropdown-item" data-name="{{:name}}" data-id="{{:id}}">Download</a>
@@ -446,7 +457,7 @@
 					<div class="row">
 						<div class="col text-center">
 							<span class="js-folder-view p-1" data-name="{{:name}}" data-id="{{:id}}" style="cursor:pointer;">
-								<i class="fa fa-folder fa-5x" aria-hidden="true" style="color:#549fe9; font-size:100px;"></i>
+								<i class="fas fa-folder fa-5x" aria-hidden="true" style="color:#549fe9; font-size:100px;"></i>
 							</span>
 						</div>
 					</div>
@@ -461,7 +472,7 @@
 					<div class="row">
 						<div class="col">
 							<div class="custom-control custom-checkbox">
-								<input class="custom-control-input js-input-checkbox" id="input_file_2_id_{{:id}}"  data-type="file" data-id="{{:id}}" type="checkbox"name="files[]" value="{{:id}}">
+								<input class="custom-control-input js-input-checkbox" id="input_file_2_id_{{:id}}"  data-type="file" data-id="{{:id}}" type="checkbox" name="files[]" value="{{:id}}">
 								<label class="custom-control-label" for="input_file_2_id_{{:id}}"></label>
 							</div>
 						</div>
@@ -486,7 +497,7 @@
 								<img src="thumbs/{{:thumbnail}}" class="p-1" class="js-thumbnail">
 							{{else}}
 								
-								<i class="fa fa-file-o fa-5x" aria-hidden="true" style="color:#549fe9; font-size:100px;"></i>
+								<i class="fas fa-file fa-5x" aria-hidden="true" style="color:#549fe9;"></i>
 							{{/if}}
 						</div>
 					</div>
@@ -499,8 +510,7 @@
 	</div>
 </script>
 
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js" integrity="sha256-fzFFyH01cBVPYzl16KT40wqjhgPtq6FFUB6ckN2+GGw=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jsrender/1.0.2/jsrender.min.js" integrity="sha256-hd/uw4FMRrVcuSBTkik17X3zMo4cASwOARGQqDrazFo=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js" integrity="sha256-yNbKY1y6h2rbVcQtf0b8lq4a+xpktyFc3pSYoGAY1qQ=" crossorigin="anonymous"></script>

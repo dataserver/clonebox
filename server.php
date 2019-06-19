@@ -109,6 +109,7 @@ switch ($action) {
                 } else {
                     $errors[] = [
                         'message' => "file '".$file->name."' not included into database.",
+                        //'errors' => $file->errors()
                     ];
                 }
             }
@@ -539,7 +540,11 @@ switch ($action) {
         $folders_ids = filter_ids_array($folders_ids);
 
         $file = new File();
-        $result_files = $file->delete($files_ids)->isValid();
+        if ( !is_array($files_ids) ){
+            $result_files = $file->delete($files_ids)->isValid();
+        } else {
+            $result_files = $file->deleteBatch($files_ids)->isValid();
+        }
         $folder = new Folder();
         foreach ($folders_ids as $folder_id) {
             $result_folders[$folder_id] = $folder->setId($folder_id)->delete($folder_id)->isValid();

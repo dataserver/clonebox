@@ -124,6 +124,8 @@ $("#overlay-dropzone").on("dragover", function (e) {
 });
 
 $(document).on("click", ".js-select-folder", function(e){
+	e.stopPropagation();
+	e.preventDefault();
 	let folder_id = $(this).attr("data-id");
 	
 	select_folder(folder_id);
@@ -131,6 +133,7 @@ $(document).on("click", ".js-select-folder", function(e){
 
 $(document).on("click", ".js-form-upload-btn-upload", function(e){
 	e.preventDefault();
+    e.stopPropagation();
 
 	$("#form-upload-input-file").click();
 });
@@ -166,6 +169,7 @@ dropzone.addEventListener('drop', async function(event) {
 
 $("#form-upload-input-file").change(function(e) {
 	e.preventDefault();
+    e.stopPropagation();
 
 	UPLOAD_FILES_DATA = [];
 	for (let i = 0, len=$(this).get(0).files.length; i < len; i++) {
@@ -180,7 +184,9 @@ $("#form-upload-input-file").change(function(e) {
 });
 
 $(document).on("click", "#upload-to-folder-btn-submit", function(e) {
+	e.stopPropagation();
 	e.preventDefault();
+
 	var folder_id = $("#overlay-select-directory-input-id").val();
 
 	$("#overlay-select-directory-input-id").val("");
@@ -189,7 +195,9 @@ $(document).on("click", "#upload-to-folder-btn-submit", function(e) {
 });
 
 $("#overlay-select-directory-buttons-btn-cancel").click(function(e) {
+	e.stopPropagation();
 	e.preventDefault();
+
 
 	UPLOAD_FILES_DATA = [];
 	$("#overlay-select-directory-buttons-submit").html("");
@@ -351,7 +359,9 @@ function uploadFileTo(folder, total_to_upload = false, idx = 0) {
  */
 
 $("#filelist").on("click", ".js-file-rename", function(e) {
+	e.stopPropagation();
 	e.preventDefault();
+
 	let id = $(this).attr("data-id");
 	let name = $(this).attr("data-name");
 	let file_ext = name.split(".").pop();
@@ -404,7 +414,9 @@ $("#filelist").on("click", ".js-file-rename", function(e) {
 
 
 $("#filelist").on("click", ".js-file-delete", function(e) {
+	e.stopPropagation();
 	e.preventDefault();
+
 	let id = $(this).attr("data-id");
 	let name = $(this).attr("data-name");
 
@@ -450,7 +462,9 @@ $("#filelist").on("click", ".js-file-delete", function(e) {
 });
 
 $("#filelist").on("click", ".js-file-move", function(e) {
+	e.stopPropagation();
 	e.preventDefault();
+
 	let name = $(this).attr("data-name");
 	let id = $(this).attr("data-id");
 
@@ -518,7 +532,9 @@ $(document).on("click", ".js-folder-view", function(e) {
 })
 
 $(document).on("click", ".js-folder-create", function(e) {
+	e.stopPropagation();
 	e.preventDefault();
+
 
 	bootbox.prompt({
 		title: "Create new folder",
@@ -564,7 +580,9 @@ $(document).on("click", ".js-folder-create", function(e) {
 });
 
 $("#filelist").on("click", ".js-folder-rename", function(e) {
+	e.stopPropagation();
 	e.preventDefault();
+
 	let id = $(this).attr("data-id");
 	let name = $(this).attr("data-name");
 
@@ -612,7 +630,9 @@ $("#filelist").on("click", ".js-folder-rename", function(e) {
 });
 
 $("#filelist").on("click", ".js-folder-delete", function(e) {
+	e.stopPropagation();
 	e.preventDefault();
+
 	let id = $(this).attr("data-id");
 	let name = $(this).attr("data-name");
 
@@ -659,6 +679,7 @@ $("#filelist").on("click", ".js-folder-delete", function(e) {
 
 $("#filelist").on("click", ".js-folder-move", function(e) {
 	e.preventDefault();
+    e.stopPropagation();
 	let name = $(this).attr("data-name");
 	let id = $(this).attr("data-id");
 		id = parseInt(id);
@@ -676,6 +697,7 @@ $("#filelist").on("click", ".js-folder-move", function(e) {
 
 $(document).on("click", "#move-folder-to-folder-btn-submit", function(e) {
 	e.preventDefault();
+    e.stopPropagation();
 	var to_folder = $("#overlay-select-directory-input-id").val();
 	var folder_id = $(this).attr("data-id");
 
@@ -719,6 +741,7 @@ $(document).on("click", "#move-folder-to-folder-btn-submit", function(e) {
 
 $("#filelist").on("click", ".js-file-download", function(e) {
 	e.preventDefault();
+    e.stopPropagation();
 	let id = $(this).attr("data-id");
 
 	window.location = "server.php?action=download-file&file=" + id;
@@ -726,6 +749,7 @@ $("#filelist").on("click", ".js-file-download", function(e) {
 
 $("#filelist").on("click", ".js-folder-download", function(e) {
 	e.preventDefault();
+    e.stopPropagation();
 	let id = $(this).attr("data-id");
 
 	window.location = "server.php?action=download-zip-folder&folder=" + id;
@@ -750,7 +774,15 @@ function uncheck_all() {
 
 	$("INPUT.js-input-checkbox").prop("checked" , false).change();
 }
+$(document).on("change", `INPUT[type="checkbox"].js-input-checkbox`, function(e){
 
+    var len = $(`INPUT[type="checkbox"].js-input-checkbox:checked`).length;
+    if (len == 0) {
+        $(".js-checkbox-bulk-cmds").css({visibility: 'hidden'});
+    } else {
+        $(".js-checkbox-bulk-cmds").css({visibility: 'visible'});
+    }
+});
 $(document).on("change","#js-checkbox-all", function(e) {
 
 	if (this.checked) {
@@ -763,6 +795,8 @@ $(document).on("change","#js-checkbox-all", function(e) {
 
 $(document).on("change", "#filelist .js-input-checkbox", function(e) {
 	e.preventDefault();
+    e.stopPropagation();
+
 	let type = $(this).attr("data-type");
 	let id = $(this).attr("data-id");
 	let checked = $(this).is(":checked");
@@ -774,6 +808,7 @@ $(document).on("change", "#filelist .js-input-checkbox", function(e) {
 		CHECKED_TOTAL_ITEMS -= 1;
 		$(`.grid-item[data-type="${type}"][data-id="${id}"]`).removeClass("selected");
 	}
+    /*
 	if (CHECKED_TOTAL_ITEMS > 0) {
 		$("#section-checkbox-action .js-checked-download").show();
 		$("#section-checkbox-action .js-checked-move ").show();
@@ -783,10 +818,13 @@ $(document).on("change", "#filelist .js-input-checkbox", function(e) {
 		$("#section-checkbox-action .js-checked-move ").hide();
 		$("#section-checkbox-action .js-checked-delete").hide();
 	}
+    */
 });
 
 $(document).on("click", ".js-checked-delete", function(e) {
 	e.preventDefault();
+    e.stopPropagation();
+
 	let array_folders_ids = [];
 	let array_files_ids = [];
 
@@ -841,7 +879,9 @@ $(document).on("click", ".js-checked-delete", function(e) {
 });
 
 $(document).on("click", ".js-checked-download", function(e) {
+	e.stopPropagation();
 	e.preventDefault();
+
 	let array_folders_ids = [];
 	let array_files_ids = [];
 
@@ -885,7 +925,9 @@ $(document).on("click", ".js-checked-download", function(e) {
 });
 
 $("#filelist").on("click", ".js-checked-move", function(e) {
+	e.stopPropagation();
 	e.preventDefault();
+
 	let disabled_folders = [];
 	let array_folders_ids = [];
 	let array_files_ids = [];
@@ -918,7 +960,9 @@ $("#filelist").on("click", ".js-checked-move", function(e) {
 });
 
 $(document).on("click", "#move-checked-to-folder-btn-submit", function(e) {
+	e.stopPropagation();
 	e.preventDefault();
+
 	let to_folder = $("#overlay-select-directory-input-id").val();
 	let folders_ids = JSON.parse( $(`#overlay-select-directory-buttons-submit INPUT[name="folders"]`).val() );
 	let files_ids = JSON.parse( $(`#overlay-select-directory-buttons-submit INPUT[name="files"]`).val() );
@@ -962,7 +1006,9 @@ $(document).on("click", "#move-checked-to-folder-btn-submit", function(e) {
  */
 
 $(document).on("click", ".js-grid-view", function(e) {
+	e.stopPropagation();
 	e.preventDefault();
+
 	let grid_size = $(this).attr("data-grid");
 	let grid_columns = $(this).attr("data-columns");
 
@@ -973,7 +1019,9 @@ $(document).on("click", ".js-grid-view", function(e) {
 });
 
 $(document).on("click", ".js-grid-sort-group", function(e) {
+	e.stopPropagation();
 	e.preventDefault();
+
 	let sort_group = $(this).attr("data-group");
 	let title = $(this).attr("data-title");
 
@@ -986,7 +1034,9 @@ $(document).on("click", ".js-grid-sort-group", function(e) {
 });
 
 $(document).on("click", ".js-grid-sort-order", function(e) {
+	e.stopPropagation();
 	e.preventDefault();
+
 	let sort_order = $(this).attr("data-order");
 
 	USER_PREFERENCES.sort_order = sort_order;
@@ -1076,13 +1126,17 @@ $("#nav-input-search").on("focusout", function(e) {
 });
 
 $(document).on("change","#search-only-this-folder", function(e) {
+	e.stopPropagation();
 	e.preventDefault();
+
 
 	$("#nav-input-search").trigger("change");
 });
 
 $("#nav-input-search").on("change paste keyup", function(e) {
+	e.stopPropagation();
 	e.preventDefault();
+
 	let search = $(this).val();
 	let thisFolderOnly = $("#search-only-this-folder").is(":checked");
 		search = (typeof(search) != "undefined") ? search : " ";
