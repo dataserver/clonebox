@@ -354,6 +354,7 @@ class File
             $this->size = (int) $row['size'];
             $this->type = $row['type'];
             $this->thumbnail = $row['thumbnail'];
+            $this->saved_as = $row['saved_as'];
             $this->lastmodified_on = $row['lastmodified_on'];
             $this->created_on = $row['created_on'];
         } else {
